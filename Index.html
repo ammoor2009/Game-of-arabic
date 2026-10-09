@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة التطبيقات اللغوية والتعليمية</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            max-width: 480px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #1e293b;
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle:last-of-type {
+            margin-bottom: 28px;
+        }
+
+        .links-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .app-item {
+            position: relative;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .app-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #0f172a;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .app-card:hover,
+        .app-card:active {
+            background-color: #10b981;
+            color: #ffffff;
+            border-color: #10b981;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+
+        .card-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .info-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+            font-weight: bold;
+            font-size: 0.95rem;
+            font-family: Georgia, serif;
+            font-style: italic;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            user-select: none;
+        }
+
+        .app-card:hover .info-btn {
+            background-color: #ffffff;
+            color: #10b981;
+            border-color: #ffffff;
+        }
+
+        .info-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .icon {
+            font-size: 1.3rem;
+        }
+
+        .info-box {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            left: 0;
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            text-align: right;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            z-index: 99;
+        }
+
+        .info-box::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 22px;
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 6px solid #1e293b;
+        }
+
+        .info-box.show {
+            display: block;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .feedback-trigger-btn {
+            margin: 20px auto 0 auto;
+            padding: 8px 16px;
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 1px dashed #cbd5e1;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .feedback-trigger-btn:hover {
+            background-color: #e2e8f0;
+            color: #0f172a;
+            border-color: #94a3b8;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 24px;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 100%;
+            text-align: right;
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            top: 14px;
+            left: 16px;
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            color: #94a3b8;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close-modal-btn:hover {
+            color: #0f172a;
+        }
+
+        .modal-title {
+            color: #1e293b;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-form input,
+        .feedback-form textarea {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .feedback-form input:focus,
+        .feedback-form textarea:focus {
+            border-color: #0369a1;
+        }
+
+        .feedback-form textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .feedback-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #1e293b;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .feedback-btn:hover {
+            background-color: #10b981;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="app-item" style="margin-bottom: 8px;">
+            <h1>
+                منصة التطبيقات الذكية
+                <span class="info-btn" style="vertical-align: middle; width: 24px; height: 24px; font-size: 0.85rem; display: inline-flex;" role="button" onclick="toggleInfo(event, this)">i</span>
+            </h1>
+            <div class="info-box" style="text-align: center;">
+                مختبر لغوي وأكاديمي يدمج بين التطبيق التفاعلي لعلوم العربية المتقدمة وبين أدوات التوثيق والتنسيق البحثي، لتوفير تجربة تعليمية ذكية وشاملة تخدم الطالب والباحث والمهتم بالتراث اللغوي. إعداد وتطوير د. عمر الرواجفة
+            </div>
+        </div>
+
+        <p class="subtitle">الهدف منها وضع الطالب في الجانب التطبيقي وإخراجه عن الأطر النظرية</p>
+        <p class="subtitle">اختر التطبيق المراد الانتقال إليه وتجربته</p>
+
+        <div class="links-grid">
+
+            <!-- لعبة النحو الميسر -->
+            <div class="app-item">
+                <a href="https://ammoor2009.github.io/nahw-al-muyassar/" target="_blank" class="app-card">
+                    <div class="card-content">
+                        <span class="info-btn" role="button" title="تعريف بالتطبيق" onclick="toggleInfo(event, this)">i</span>
+                        <span>لعبة النحو الميسر</span>
+                    </div>
+                    <span class="icon">🧩</span>
+                </a>
+                <div class="info-box">لعبة تعليمية تفاعلية تُبسّط قواعد النحو العربي بأسلوب ممتع ومتدرّج، معزّزة بالتمارين والتحديات التي ترسّخ المهارات النحوية لدى الطالب.</div>
+            </div>
+
+            <!-- لعبة الفارس اللغوي -->
+            <div class="app-item">
+                <a href="https://ammoor2009.github.io/mamalek/?embed=true" target="_blank" class="app-card">
+                    <div class="card-content">
+                        <span class="info-btn" role="button" title="تعريف بالتطبيق" onclick="toggleInfo(event, this)">i</span>
+                        <span>رحلة الفارس اللغوي</span>
+                    </div>
+                    <span class="icon">🌍</span>
+                </a>
+                <div class="info-box">تطبيق يهدف لتعليم قواعد اللغة العربية ومهاراتها بطريقة ممتعة وتفاعلية، من خلال المغامرة في خمس ممالك لغوية..</div>
+            </div>
+
+            <!-- لعبة فرسان القواعد -->
+            <div class="app-item">
+                <a href="https://ammoor2009.github.io/Game-na7o/?embed=true" target="_blank" class="app-card">
+                    <div class="card-content">
+                        <span class="info-btn" role="button" title="تعريف بالتطبيق" onclick="toggleInfo(event, this)">i</span>
+                        <span>لعبة فرسان القواعد</span>
+                    </div>
+                    <span class="icon">🏇</span>
+                </a>
+                <div class="info-box">لعبة نحوية تفاعلية حماسية تعتمد على الأسس التطبيقية النحوية ذات مستوى يناسب طلبة الجامعات.</div>
+            </div>
+
+        </div>
+
+        <div>
+            <button class="feedback-trigger-btn" onclick="openFeedbackModal()">
+                <span>💬</span>
+                <span>إرسال ملاحظات أو استفسار</span>
+            </button>
+        </div>
+
+        <footer>
+            جميع الحقوق محفوظة د.عمر الرواجفة&copy; 2026
+        </footer>
+    </div>
+
+    <div class="modal-overlay" id="feedbackModal" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="closeFeedbackModal()">&times;</button>
+            <div class="modal-title">
+                <span>💬</span>
+                <span>إرسال ملاحظات أو استفسار</span>
+            </div>
+            <form action="https://formspree.io/f/meajyqyj" method="POST" class="feedback-form" id="feedbackForm" onsubmit="submitFeedback(event)">
+                <input type="text" name="name" placeholder="الاسم (اختياري)">
+                <input type="text" name="contact" placeholder="البريد الإلكتروني أو رقم التواصل (اختياري)">
+                <textarea name="message" required placeholder="اكتب ملاحظتك أو اقتراحك هنا..."></textarea>
+                <button type="submit" class="feedback-btn" id="submitBtn">إرسال الملاحظة</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleInfo(event, button) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const parentItem = button.closest('.app-item');
+            const infoBox = parentItem.querySelector('.info-box');
+            const isCurrentlyShown = infoBox.classList.contains('show');
+
+            document.querySelectorAll('.info-box').forEach(box => {
+                box.classList.remove('show');
+            });
+            document.querySelectorAll('.app-item').forEach(item => {
+                item.style.zIndex = '1';
+            });
+
+            if (!isCurrentlyShown) {
+                infoBox.classList.add('show');
+                parentItem.style.zIndex = '100';
+            }
+        }
+
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.info-box').forEach(box => {
+                box.classList.remove('show');
+            });
+            document.querySelectorAll('.app-item').forEach(item => {
+                item.style.zIndex = '1';
+            });
+        });
+
+        function openFeedbackModal() {
+            document.getElementById('feedbackModal').classList.add('active');
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('feedbackModal').classList.remove('active');
+        }
+
+        function closeModalOnOverlay(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                closeFeedbackModal();
+            }
+        }
+
+        function submitFeedback(event) {
+            event.preventDefault();
+            const form = event.target;
+            const submitBtn = document.getElementById('submitBtn');
+
+            submitBtn.innerText = 'جاري الإرسال...';
+            submitBtn.disabled = true;
+
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    submitBtn.innerText = 'تم الإرسال بنجاح! ✓';
+                    submitBtn.style.backgroundColor = '#10b981';
+                    setTimeout(() => {
+                        closeFeedbackModal();
+                        form.reset();
+                        submitBtn.innerText = 'إرسال الملاحظة';
+                        submitBtn.style.backgroundColor = '#1e293b';
+                        submitBtn.disabled = false;
+                    }, 1200);
+                } else {
+                    alert('حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً.');
+                    submitBtn.innerText = 'إرسال الملاحظة';
+                    submitBtn.disabled = false;
+                }
+            }).catch(() => {
+                alert('حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً.');
+                submitBtn.innerText = 'إرسال الملاحظة';
+                submitBtn.disabled = false;
+            });
+        }
+    </script>
+
+</body>
+</html>
