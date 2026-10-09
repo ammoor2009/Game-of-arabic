@@ -180,6 +180,32 @@
             border-color: #94a3b8;
         }
 
+        /* ====== عداد الزوار ====== */
+        .visitor-counter {
+            margin-top: 22px;
+            padding: 8px 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #166534;
+            font-weight: 600;
+        }
+
+        .visitor-counter .eye {
+            font-size: 1rem;
+        }
+
+        .visitor-counter #gc-visits {
+            color: #10b981;
+            font-weight: 700;
+            min-width: 20px;
+            display: inline-block;
+        }
+
         .modal-overlay {
             display: none;
             position: fixed;
@@ -283,7 +309,7 @@
         }
 
         footer {
-            margin-top: 30px;
+            margin-top: 20px;
             font-size: 0.85rem;
             color: #94a3b8;
         }
@@ -352,11 +378,21 @@
             </button>
         </div>
 
+        <!-- ====== عداد الزوار ====== -->
+        <div>
+            <div class="visitor-counter">
+                <span class="eye">👁️</span>
+                <span>عدد الزوار:</span>
+                <span id="gc-visits">...</span>
+            </div>
+        </div>
+
         <footer>
             جميع الحقوق محفوظة د.عمر الرواجفة&copy; 2026
         </footer>
     </div>
 
+    <!-- النافذة المنبثقة -->
     <div class="modal-overlay" id="feedbackModal" onclick="closeModalOnOverlay(event)">
         <div class="modal-content">
             <button class="close-modal-btn" onclick="closeFeedbackModal()">&times;</button>
@@ -373,7 +409,23 @@
         </div>
     </div>
 
+    <!-- ====== سكريبت GoatCounter ====== -->
+    <script data-goatcounter="https://ammoor2009.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+
     <script>
+        // جلب عدد الزوار من GoatCounter وعرضه في الصفحة
+        window.addEventListener('load', function() {
+            fetch('https://ammoor2009.goatcounter.com/counter/TOTAL.json')
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('gc-visits').textContent = data.count.toLocaleString('ar-EG');
+                })
+                .catch(() => {
+                    document.getElementById('gc-visits').textContent = '—';
+                });
+        });
+
         function toggleInfo(event, button) {
             event.preventDefault();
             event.stopPropagation();
