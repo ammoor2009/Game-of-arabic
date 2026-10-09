@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> ِمنصَّةُ الألعابِ اللغويَّةِ والتعليميَّة</title>
+    <title> ِمنصَّةُ الألعابِ اللغويَّةِ والتعليميَّة</title>
     <style>
         * {
             box-sizing: border-box;
@@ -36,6 +36,15 @@
             color: #1e293b;
             font-size: 1.6rem;
             margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: nowrap;
+        }
+
+        h1 .info-btn {
+            flex-shrink: 0;
         }
 
         p.subtitle {
@@ -320,7 +329,7 @@
     <div class="container">
         <div class="app-item" style="margin-bottom: 8px;">
             <h1>
-            منَصَّةُ الأَلْعَابِ اللُّغَوِيَّةِ الذَّكِيَّة
+            منَصَّةُ الأَلْعَابِ اللُّغَوِيَّةِ الذَّكِيَّة
                 <span class="info-btn" style="vertical-align: middle; width: 24px; height: 24px; font-size: 0.85rem; display: inline-flex;" role="button" onclick="toggleInfo(event, this)">i</span>
             </h1>
             <div class="info-box" style="text-align: center;">منصة تعليمية تفاعلية عبر الألعاب ، تضم أكثر من ألفي سؤال وجواب تتعلق باللغة العربية نحوها وصرفها وبلاغتها وإملائها والأخطاء الشائعة. إعداد وتطوير د. عمر الرواجفة
