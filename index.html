@@ -526,5 +526,18 @@
         }
     </script>
 
+    <!-- مشغل الصوت المخفي -->
+<audio id="welcomeAudio" src="welcome.mp3" preload="auto"></audio>
+
+<script>
+  // محاولة تشغيل الصوت عند تحميل الصفحة
+  window.addEventListener('load', function() {
+    var audio = document.getElementById('welcomeAudio');
+    audio.play().catch(function(error) {
+      console.log("تعذر التشغيل التلقائي: ", error);
+      // في حال منع المتصفح التشغيل التلقائي، يمكنك إظهار زر تشغيل يدوي
+    });
+  });
+</script>
 </body>
 </html>
