@@ -429,6 +429,9 @@
         </div>
     </div>
 
+    <!-- ====== مشغل الصوت الترحيبي ====== -->
+    <audio id="welcomeAudio" src="welcome.mp3" preload="auto"></audio>
+
     <!-- ====== سكريبت GoatCounter ====== -->
     <script data-goatcounter="https://ammoor2009.goatcounter.com/count"
             async src="//gc.zgo.at/count.js"></script>
@@ -445,6 +448,39 @@
                     document.getElementById('gc-visits').textContent = '—';
                 });
         });
+
+        // ====== تشغيل الصوت الترحيبي بذكاء ======
+        (function() {
+            var audio = document.getElementById('welcomeAudio');
+            var played = false;
+
+            function tryPlay() {
+                if (played) return;
+                var p = audio.play();
+                if (p !== undefined) {
+                    p.then(function() {
+                        played = true;
+                        removeListeners();
+                    }).catch(function() {
+                        // المتصفح منع التشغيل التلقائي، سننتظر أول تفاعل من الزائر
+                    });
+                }
+            }
+
+            function removeListeners() {
+                document.removeEventListener('click', tryPlay);
+                document.removeEventListener('touchstart', tryPlay);
+                document.removeEventListener('keydown', tryPlay);
+            }
+
+            // محاولة التشغيل التلقائي عند اكتمال تحميل الصفحة
+            window.addEventListener('load', tryPlay);
+
+            // إن منع المتصفح التشغيل التلقائي، شغّله عند أول تفاعل
+            document.addEventListener('click', tryPlay);
+            document.addEventListener('touchstart', tryPlay);
+            document.addEventListener('keydown', tryPlay);
+        })();
 
         function toggleInfo(event, button) {
             event.preventDefault();
@@ -526,18 +562,5 @@
         }
     </script>
 
-    <!-- مشغل الصوت المخفي -->
-<audio id="welcomeAudio" src="welcome.mp3" preload="auto"></audio>
-
-<script>
-  // محاولة تشغيل الصوت عند تحميل الصفحة
-  window.addEventListener('load', function() {
-    var audio = document.getElementById('welcomeAudio');
-    audio.play().catch(function(error) {
-      console.log("تعذر التشغيل التلقائي: ", error);
-      // في حال منع المتصفح التشغيل التلقائي، يمكنك إظهار زر تشغيل يدوي
-    });
-  });
-</script>
 </body>
 </html>
