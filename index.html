@@ -19,7 +19,41 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 60px 20px 20px 20px; /* زيادة أعلى الصفحة لتفادي تغطية الشريط */
+        }
+
+        /* ===== شريط النص المتحرك ===== */
+        .ticker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            background: linear-gradient(90deg, #1e293b, #10b981);
+            color: #ffffff;
+            padding: 10px 0;
+            direction: ltr; /* مهم عشان الحركة ما تتأثر بـ rtl */
+            z-index: 999;
+            font-size: 0.95rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .ticker__text {
+            display: inline-block;
+            padding-left: 100%; /* يبدأ النص من خارج الشاشة يمين */
+            animation: moveRight 35s linear infinite;
+        }
+
+        @keyframes moveRight {
+            0%   { transform: translateX(-100%); }
+            100% { transform: translateX(0); }
+        }
+
+        /* يتوقف عند مرور الماوس على الشريط */
+        .ticker:hover .ticker__text {
+            animation-play-state: paused;
         }
 
         .container {
@@ -325,6 +359,13 @@
     </style>
 </head>
 <body>
+
+    <!-- ===== شريط النص المتحرك ===== -->
+    <div class="ticker">
+        <span class="ticker__text">
+            ✦ وَمَنْ لَمْ يَذُقْ مُرَّ التَّعَلُّمِ سَاعَةً ❁ تَجَرَّعَ ذُلَّ الْجَهْلِ طُولَ حَيَاتِهِ ✦ ✦ وَمَنْ فَاتَهُ التَّعْلِيمُ وَقْتَ شَبَابِهِ ❁ فَكَبِّرْ عَلَيْهِ أَرْبَعًا لِوَفَاتِهِ ✦
+        </span>
+    </div>
 
     <div class="container">
         <div class="app-item" style="margin-bottom: 8px;">
